@@ -7,7 +7,6 @@ import {
 
 @Component({
     selector: 'app-root',
-    standalone: true,
     imports: [
         MatSelectionList,
         MatListOption,
