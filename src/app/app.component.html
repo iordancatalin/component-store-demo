@@ -1,15 +1,9 @@
 <div class="image-generator">
   <div class="selection-list">
-    <mat-selection-list multiple="false" [hideSingleSelectionIndicator]="true">
-      @for (option of options; track option) {
-      <mat-list-option [value]="option.value">
-        {{ option.label }}</mat-list-option
-      >
-      }
-    </mat-selection-list>
+    <ap-categories-list />
   </div>
 
   <div class="image-container">
-    <h4>No category selected</h4>
+    <ap-main-content />
   </div>
 </div>

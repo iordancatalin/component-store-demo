@@ -8,7 +8,7 @@ export class ImageGeneratorService {
 
     generateURL(category: string) {
         return of(`https://api.algobook.info/v1/randomimage?category=${category}`).pipe(
-            delay(2_000)
+            delay(1_500)
         );
     }
 }
