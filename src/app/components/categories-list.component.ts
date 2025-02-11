@@ -30,7 +30,7 @@ export class CategoriesListComponent {
 
     readonly store = inject(AppStore);
 
-    readonly selectedValue = toSignal(this.store.selectedValue, { requireSync: true })
+    readonly selectedValue = toSignal(this.store.selectedValue$, { requireSync: true })
 
     readonly options = [
         { label: 'Backgrounds', value: 'backgrounds' },

@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store'
 import { tapResponse } from '@ngrx/operators';
-import { EMPTY, Observable, switchMap, tap } from 'rxjs';
+import { EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 import { ImageGeneratorService } from './image-generator.service';
 
 export interface IAppStore {
@@ -12,35 +12,24 @@ export interface IAppStore {
 
 export class AppStore extends ComponentStore<IAppStore> {
 
-    readonly url$ = this.select(state => state.url);
-    readonly loading$ = this.select(state => state.loading);
-    readonly selectedValue = this.select(state => state.selectedValue);
+    readonly url$ = of(null);
+    readonly loading$ = of(false);
+    readonly selectedValue$ = of(null);
 
-    readonly valueChanged = this.effect((value$: Observable<string>) => value$.pipe(
-        tap((value) => {
-            this._updateValue(value);
-            this._updateLoading(true);
-        }),
-        switchMap((value) => this._imageGenerator.generateURL(value).pipe(
-            tapResponse((url) => this._urlLoaded(url), () => EMPTY)
-        )),
-    ))
+    readonly valueChanged = (value: string) => {
+        console.log(value);
+        // implement value changed effect
+    };
+
+    private _updateValue = this.updater((state, value: string) => ({
+        ...state,
+        selectedValue: value
+    }));
 
     private _updateLoading = this.updater((state, loading: boolean) => ({
         ...state,
         loading
     }));
-
-    private _updateValue = this.updater((state, value: string) => ({
-        ...state,
-        selectedValue: value
-    }))
-
-    private _urlLoaded = this.updater((state, imageURL: string) => ({
-        ...state,
-        url: imageURL,
-        loading: false,
-    }))
 
     private _imageGenerator = inject(ImageGeneratorService);
 
