@@ -1,44 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatDivider } from '@angular/material/divider';
 import {
     MatListOption,
     MatSelectionList,
+    MatSelectionListChange,
 } from '@angular/material/list';
+import { AppStore } from './app.store';
+import { AsyncPipe } from '@angular/common';
+
+import {
+    toObservable,
+    toSignal,
+} from '@angular/core/rxjs-interop';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CategoriesListComponent } from './components/categories-list.component';
+import { MainContentComponent } from "./components/main-content.component";
 
 @Component({
     selector: 'app-root',
     imports: [
-        MatSelectionList,
-        MatListOption,
-        MatDivider,
+        CategoriesListComponent,
+        MainContentComponent
     ],
+    providers: [AppStore],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
 export class AppComponent {
-    title = 'component-store-demo';
-
-
-    readonly options = [
-        { label: 'Backgrounds', value: 'backgrounds' },
-        { label: 'Fashion', value: 'fashion' },
-        { label: "Nature", value: "nature" },
-        { label: "Science", value: "science" },
-        { label: "Education", value: "education" },
-        { label: "Feelings", value: "feelings" },
-        { label: "Health", value: "health" },
-        { label: "People", value: "people" },
-        { label: "Places", value: "places" },
-        { label: "Animals", value: "animals" },
-        { label: "Industry", value: "industry" },
-        { label: "Computer", value: "computer" },
-        { label: "Food", value: "food" },
-        { label: "Sports", value: "sports" },
-        { label: "Transportation", value: "transportation" },
-        { label: "Travel", value: "travel" },
-        { label: "Buildings", value: "buildings" },
-        { label: "Business", value: "business" },
-        { label: "Music", value: "music" }
-    ]
-
+    readonly store = inject(AppStore);
 }
