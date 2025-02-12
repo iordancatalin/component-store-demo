@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store'
-import { tapResponse } from '@ngrx/operators';
+import { tapResponse } from '@ngrx/operators'
 import { EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 import { ImageGeneratorService } from './image-generator.service';
 
@@ -12,14 +12,27 @@ export interface IAppStore {
 
 export class AppStore extends ComponentStore<IAppStore> {
 
-    readonly url$ = of(null);
-    readonly loading$ = of(false);
-    readonly selectedValue$ = of(null);
+    readonly url$ = this.select(state => state.url);
+    readonly loading$ = this.select(state => state.loading);
+    readonly selectedValue$ = this.select(state => state.selectedValue);
 
-    readonly valueChanged = (value: string) => {
-        console.log(value);
-        // implement value changed effect
-    };
+    readonly valueChanged = this.effect((category$: Observable<string>) => category$.pipe(
+        tap(category => {
+            this._updateValue(category);
+            this._updateLoading(true);
+        }),
+        switchMap(category => this._imageGenerator.generateURL(category).pipe(
+            tapResponse((url) => {
+                this._updateURL(url);
+            }, () => EMPTY)
+        )),
+    ));
+
+    private _updateURL = this.updater((state, url: string) => ({
+        ...state,
+        url,
+        loading: false,
+    }))
 
     private _updateValue = this.updater((state, value: string) => ({
         ...state,
